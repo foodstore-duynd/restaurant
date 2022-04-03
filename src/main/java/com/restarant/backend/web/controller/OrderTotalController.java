@@ -21,6 +21,7 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping("/api")
 @Transactional
+@CrossOrigin("*")
 public class OrderTotalController {
 
     private final Logger log = LoggerFactory.getLogger(OrderTotalController.class);

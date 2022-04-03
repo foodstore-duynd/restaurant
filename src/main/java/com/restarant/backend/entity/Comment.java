@@ -27,7 +27,7 @@ public class Comment implements Serializable {
     private String username;
 
     @Column(name = "deleteflag")
-    private Long deleteflag;
+    private Long deleteflag = 0L;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "comments", "foodDetalls", "category" }, allowSetters = true)

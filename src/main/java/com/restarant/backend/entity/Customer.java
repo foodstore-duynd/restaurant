@@ -42,7 +42,7 @@ public class Customer implements Serializable {
     private String gender;
 
     @Column(name = "deleteflag")
-    private long deleteflag;
+    private Long deleteflag = 0L;
 
     @OneToOne(mappedBy = "customer")
     private Account account;

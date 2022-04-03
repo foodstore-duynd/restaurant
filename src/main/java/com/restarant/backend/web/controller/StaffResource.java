@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("*")
 public class StaffResource {
 
     private final Logger log = LoggerFactory.getLogger(StaffResource.class);

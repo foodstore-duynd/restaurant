@@ -29,10 +29,10 @@ public class OrderDetails implements Serializable {
     private Long id;
 
     @Column(name = "quantity")
-    private long quantity;
+    private Long quantity = 0L;
 
     @Column(name = "deleteflag")
-    private long deleteflag;
+    private Long deleteflag = 0L;
 
     @ManyToOne
     @JsonIgnoreProperties(value = {"foodMedias", "orderDetails", "food"}, allowSetters = true)

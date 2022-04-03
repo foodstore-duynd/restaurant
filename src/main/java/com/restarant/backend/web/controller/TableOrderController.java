@@ -9,6 +9,7 @@ import com.restarant.backend.service.impl.TableOrderService;
 import com.restarant.backend.service.validate.exception.InvalidDataExeception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("*")
 public class TableOrderController {
 
     private final Logger log = LoggerFactory.getLogger(TableOrderController.class);
@@ -80,11 +82,11 @@ public class TableOrderController {
 //     *
 //     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of tableOrders in body.
 //     */
-//    @GetMapping("/table-orders")
-//    public List<TableOrder> getAllTableOrders() {
-//        log.debug("REST request to get all TableOrders");
-//        return tableOrderRepository.findAll();
-//    }
+    @GetMapping("/table-orders")
+    public List<TableOrderDto> getAllTableOrders(Pageable pageable) {
+        log.debug("REST request to get all TableOrders");
+        return (List<TableOrderDto>) tableOrderService.getAll(pageable);
+    }
 //
 //    /**
 //     * {@code GET  /table-orders/:id} : get the "id" tableOrder.

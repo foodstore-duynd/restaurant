@@ -35,7 +35,7 @@ public class FoodMedia implements Serializable {
     private String foodType;
 
     @Column(name = "deleteflag")
-    private long deleteflag;
+    private Long deleteflag = 0L;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FOOD_DETALLS_ID")

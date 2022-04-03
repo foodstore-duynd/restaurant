@@ -36,7 +36,7 @@ public class OrderTotal implements Serializable {
     private BigDecimal amountTotal;
 
     @Column(name = "deleteflag")
-    private long deleteflag;
+    private Long deleteflag = 0L;
 
     @Column(name = "status")
     private Integer status;

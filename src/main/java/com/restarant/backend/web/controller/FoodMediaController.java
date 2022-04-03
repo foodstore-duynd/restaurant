@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 @Slf4j
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("*")
 public class FoodMediaController {
 
     private final IFoodMediaService foodMediaService;

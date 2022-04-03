@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class TableDto {
     private Long id;
-    private Integer status;
+    private int status;
     private Integer numberOfChair;
 }

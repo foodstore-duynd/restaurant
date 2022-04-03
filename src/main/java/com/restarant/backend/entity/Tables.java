@@ -29,15 +29,15 @@ public class Tables implements Serializable {
     private Long id;
 
     @Column(name = "status")
-    private int status;
+    private Long status = 0L;
 
     @Column(name = "numberofchair")
     private Integer numberOfChair;
 
     @Column(name = "deleteflag")
-    private long deleteflag;
+    private Long deleteflag = 0L;
 
-    @OneToMany(mappedBy = "tables")
+    @OneToMany(mappedBy = "tables", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties(value = { "orderDetails", "tables", "orderTotal" }, allowSetters = true)
     private Set<TableOrder> tableOrders = new HashSet<>();
 

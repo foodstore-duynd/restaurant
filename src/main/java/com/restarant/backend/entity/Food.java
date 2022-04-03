@@ -49,7 +49,7 @@ public class Food implements Serializable {
     private Long notes;
 
     @Column(name = "deleteflag")
-    private long deleteflag;
+    private Long deleteflag = 0L;
 
     @OneToMany(mappedBy = "food")
     @JsonIgnoreProperties(value = { "food" }, allowSetters = true)

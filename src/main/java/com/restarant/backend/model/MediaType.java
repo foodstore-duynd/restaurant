@@ -15,7 +15,7 @@ public enum MediaType {
     }
 
     @Getter
-    enum VideoType {
+    public enum VideoType {
         MP4(".mp4"), AVI(".avi"), WMV(".wmv"), MKV(".mkv");
 
         private String type;
@@ -36,7 +36,7 @@ public enum MediaType {
     }
 
     @Getter
-    enum ImageType {
+    public enum ImageType {
         JPG(".jpg"), JPEG(".jpeg"), PNG(".png");
 
         private String type;

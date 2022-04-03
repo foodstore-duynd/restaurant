@@ -40,7 +40,7 @@ public class FoodDetails implements Serializable {
     private BigDecimal amount;
 
     @Column(name = "deleteflag")
-    private long deleteflag;
+    private Long deleteflag = 0L;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "foodDetalls" }, allowSetters = true)

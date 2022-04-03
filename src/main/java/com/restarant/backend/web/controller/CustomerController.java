@@ -18,6 +18,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api")
 @Transactional
+@CrossOrigin("*")
 public class CustomerController {
 
     private static final String ENTITY_NAME = "customer";

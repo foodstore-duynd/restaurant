@@ -74,7 +74,7 @@ public class TableOrderService implements ITableOrderService {
 
         Tables tables = new Tables();
         tables.setId(result.getTables().getId());
-        tables.setStatus(1);
+        tables.setStatus(1L);
         tablesRepository.save(tables);
 
         return mapper.convertToDto(result);
@@ -109,6 +109,7 @@ public class TableOrderService implements ITableOrderService {
 
     @Override
     public Collection<TableOrderDto> getAll(Pageable pageable) {
-        return null;
+        return mapper.convertToListDto(
+                tableOrderRepository.findAll(pageable).getContent());
     }
 }

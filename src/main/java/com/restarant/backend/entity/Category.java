@@ -35,7 +35,7 @@ public class Category implements Serializable {
     private String name;
 
     @Column(name = "deleteflag")
-    private long deleteflag;
+    private Long deleteflag = 0L;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties(value = { "comments", "foodDetalls", "category" }, allowSetters = true)

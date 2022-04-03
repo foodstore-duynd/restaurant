@@ -20,6 +20,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 @Transactional
+@CrossOrigin("*")
 public class TablesController {
 
     private final Logger log = LoggerFactory.getLogger(TablesController.class);

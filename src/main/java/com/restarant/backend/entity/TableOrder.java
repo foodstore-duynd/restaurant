@@ -31,7 +31,7 @@ public class TableOrder implements Serializable {
     private Long id;
 
     @Column(name = "deleteflag")
-    private long deleteflag;
+    private Long deleteflag = 0L;
 
     @OneToMany(mappedBy = "tableOrder", cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = {"foodDetalls", "tableOrder"}, allowSetters = true)

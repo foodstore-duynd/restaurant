@@ -64,7 +64,9 @@ public class TableService implements ITableService {
         if (!tablesRepository.existsById(id)) {
             throw new InvalidDataExeception("The foodMedia[id] not found");
         }
-
+        if(tablesRepository.findByIdAndStatusIs(id, 0) == null){
+            throw new InvalidDataExeception("Table are using!");
+        }
         log.info("Someone delete table id-" + id);
         tablesRepository.deleteById(id);
         return true;

@@ -35,7 +35,7 @@ public class Staff implements Serializable {
     private String gender;
 
     @Column(name = "deleteflag")
-    private long deleteflag;
+    private Long deleteflag = 0L;
 
     @OneToMany(mappedBy = "staff")
     @JsonIgnoreProperties(value = { "tableOrders", "payment", "customer", "staff" }, allowSetters = true)

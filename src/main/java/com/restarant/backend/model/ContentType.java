@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public enum ContentType {
-    JPG("image/jpg"),
+    JPG("image/jpeg"),
     PNG("image/png"),
     MP4("mp4");
 

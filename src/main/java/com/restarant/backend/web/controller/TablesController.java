@@ -2,6 +2,7 @@ package com.restarant.backend.web.controller;
 
 import com.restarant.backend.dto.TableDto;
 import com.restarant.backend.entity.Tables;
+import com.restarant.backend.model.Pages;
 import com.restarant.backend.repository.TablesRepository;
 import com.restarant.backend.service.ITableService;
 import com.restarant.backend.service.validate.exception.InvalidDataExeception;
@@ -127,5 +128,10 @@ public class TablesController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    @GetMapping("/tables/pages")
+    public ResponseEntity<Pages> getPages(Pageable pageable){
+        return ResponseEntity.ok(tableService.getPage(pageable));
     }
 }

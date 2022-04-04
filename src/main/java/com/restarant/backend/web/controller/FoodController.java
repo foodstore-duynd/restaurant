@@ -2,6 +2,7 @@ package com.restarant.backend.web.controller;
 
 import com.restarant.backend.dto.FoodDto;
 import com.restarant.backend.entity.Food;
+import com.restarant.backend.model.Pages;
 import com.restarant.backend.service.IFoodService;
 import com.restarant.backend.service.validate.exception.InvalidDataExeception;
 import lombok.SneakyThrows;
@@ -126,5 +127,10 @@ public class FoodController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    @GetMapping("/foods/pages")
+    public ResponseEntity<Pages> getPages(Pageable pageable){
+        return ResponseEntity.ok(foodservice.getPage(pageable));
     }
 }

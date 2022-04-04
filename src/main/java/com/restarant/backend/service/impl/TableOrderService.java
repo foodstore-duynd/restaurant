@@ -46,7 +46,7 @@ public class TableOrderService implements ITableOrderService {
         if(dto.getTableId() == null){
             throw new InvalidDataExeception("id must not null");
         }
-        if(tablesRepository.findByIdAndStatusIs(dto.getTableId(), 0) == null){
+        if(tablesRepository.findByIdAndStatusIs(dto.getTableId(), 0L) == null){
             throw new InvalidDataExeception("Table are using!");
         }
 

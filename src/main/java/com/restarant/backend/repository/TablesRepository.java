@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface TablesRepository extends JpaRepository<Tables, Long> {
-//    @Query("SELECT tbl FROM Tables tbl WHERE tbl.id = :id AND tbl.status = 0")
-    Tables findByIdAndStatusIs(Long id, int status);
+   // @Query("SELECT tbl FROM Tables tbl WHERE tbl.id = :id AND tbl.status = :status")
+    Tables findByIdAndStatusIs(Long id, Long status);
 }

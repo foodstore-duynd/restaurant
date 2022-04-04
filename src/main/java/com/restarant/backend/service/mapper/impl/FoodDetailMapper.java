@@ -13,7 +13,7 @@ public class FoodDetailMapper extends AbstractDtoMapperAdapter<FoodDetails, Food
     @Override
     public FoodDetailsDto convertToDto(FoodDetails entity) {
         FoodDetailsDto result = super.convertToDto(entity);
-        if(result == null){
+        if(result == null || entity == null){
             return null;
         }
         result.setFoodId(entity.getFood().getId());

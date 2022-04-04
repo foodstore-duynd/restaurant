@@ -75,4 +75,17 @@ public class Food implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public String toString() {
+        return "Food{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", create=" + create +
+                ", name='" + name + '\'' +
+                ", views=" + views +
+                ", notes=" + notes +
+                ", deleteflag=" + deleteflag +
+                '}';
+    }
 }

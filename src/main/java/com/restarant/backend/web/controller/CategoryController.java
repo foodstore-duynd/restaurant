@@ -2,6 +2,7 @@ package com.restarant.backend.web.controller;
 
 import com.restarant.backend.dto.CategoryDto;
 import com.restarant.backend.entity.Category;
+import com.restarant.backend.model.Pages;
 import com.restarant.backend.repository.CategoryRepository;
 import com.restarant.backend.service.ICategoryService;
 import com.restarant.backend.service.validate.exception.InvalidDataExeception;
@@ -89,4 +90,8 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
+    @GetMapping("/categories/pages")
+    public ResponseEntity<Pages> getPages(Pageable pageable){
+        return ResponseEntity.ok(categoryService.getPage(pageable));
+    }
 }

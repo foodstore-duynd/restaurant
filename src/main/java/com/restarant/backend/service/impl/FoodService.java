@@ -2,6 +2,7 @@ package com.restarant.backend.service.impl;
 
 import com.restarant.backend.dto.FoodDto;
 import com.restarant.backend.entity.Food;
+import com.restarant.backend.model.Pages;
 import com.restarant.backend.repository.CategoryRepository;
 import com.restarant.backend.repository.FoodRepository;
 import com.restarant.backend.service.IFoodService;
@@ -58,6 +59,11 @@ public class FoodService implements IFoodService {
     public Set<FoodDto> getAll(Pageable pageable) {
         List<Food> foods = foodRepository.findAll(pageable).getContent();
         return new HashSet<>(mapper.convertToListDto(foods));
+    }
+
+    @Override
+    public Pages getPage(Pageable pageable) {
+        return new Pages(foodRepository.findAll(pageable));
     }
 
     @Override

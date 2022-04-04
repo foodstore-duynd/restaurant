@@ -4,6 +4,7 @@ import com.restarant.backend.dto.CategoryDto;
 import com.restarant.backend.dto.TableDto;
 import com.restarant.backend.entity.Category;
 import com.restarant.backend.entity.Tables;
+import com.restarant.backend.model.Pages;
 import com.restarant.backend.repository.TablesRepository;
 import com.restarant.backend.service.ITableService;
 import com.restarant.backend.service.mapper.impl.TableMapper;
@@ -64,7 +65,7 @@ public class TableService implements ITableService {
         if (!tablesRepository.existsById(id)) {
             throw new InvalidDataExeception("The foodMedia[id] not found");
         }
-        if(tablesRepository.findByIdAndStatusIs(id, 0) == null){
+        if(tablesRepository.findByIdAndStatusIs(id, 0L) == null){
             throw new InvalidDataExeception("Table are using!");
         }
         log.info("Someone delete table id-" + id);
@@ -84,5 +85,10 @@ public class TableService implements ITableService {
         return tableMapper.convertToListDto(
                 tablesRepository.findAll(pageable).getContent()
         );
+    }
+
+    @Override
+    public Pages getPage(Pageable pageable) {
+        return new Pages(tablesRepository.findAll(pageable));
     }
 }

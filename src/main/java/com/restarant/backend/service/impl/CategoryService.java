@@ -2,6 +2,7 @@ package com.restarant.backend.service.impl;
 
 import com.restarant.backend.dto.CategoryDto;
 import com.restarant.backend.entity.Category;
+import com.restarant.backend.model.Pages;
 import com.restarant.backend.repository.CategoryRepository;
 import com.restarant.backend.service.ICategoryService;
 import com.restarant.backend.service.mapper.IConverterDto;
@@ -84,5 +85,10 @@ public class CategoryService implements ICategoryService {
         return (List<CategoryDto>) categoryMapper.convertToListDto(
                 categoryRepository.findAll(pageable).getContent()
         );
+    }
+
+    @Override
+    public Pages getPage(Pageable pageable) {
+        return new Pages(categoryRepository.findAll(pageable));
     }
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 public class OrderTotalDto {
     private Long id;
     private Long voucher;
+    private int status;
     private BigDecimal amountTotal;
     private Set<TableOrderDto> tableOrders;
     private Long paymentId;

@@ -5,6 +5,7 @@ import com.restarant.backend.dto.OrderTotalDto;
 import com.restarant.backend.entity.Customer;
 import com.restarant.backend.entity.OrderDetails;
 import com.restarant.backend.entity.OrderTotal;
+import com.restarant.backend.model.OrderTotalStatus;
 import com.restarant.backend.repository.*;
 import com.restarant.backend.service.IOrderTotalService;
 import com.restarant.backend.service.mapper.IConverterDto;
@@ -62,6 +63,10 @@ public class OrderTotalService implements IOrderTotalService {
         if (!orderTotalRepository.existsById(id)) {
             throw new InvalidDataExeception("The food[id] not found");
         }
+        OrderTotal orderTotal = orderTotalRepository.findById(id).get();
+        if(orderTotal.getStatus() >= OrderTotalStatus.WAIT_ACCEPT){
+            return false;
+        }
         log.info(String.format("Someone detele orderTotal[id-%d]", id));
         orderTotalRepository.deleteById(id);
         return true;
@@ -81,4 +86,5 @@ public class OrderTotalService implements IOrderTotalService {
     public OrderTotal createToCustomer(Customer customer) {
         return null;
     }
+
 }

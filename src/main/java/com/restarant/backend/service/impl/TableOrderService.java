@@ -6,6 +6,7 @@ import com.restarant.backend.entity.Customer;
 import com.restarant.backend.entity.OrderTotal;
 import com.restarant.backend.entity.TableOrder;
 import com.restarant.backend.entity.Tables;
+import com.restarant.backend.model.OrderTotalStatus;
 import com.restarant.backend.repository.OrderTotalRepository;
 import com.restarant.backend.repository.TableOrderRepository;
 import com.restarant.backend.repository.TablesRepository;
@@ -60,7 +61,7 @@ public class TableOrderService implements ITableOrderService {
             OrderTotal newOrderTotal = new OrderTotal();
             newOrderTotal.setCustomer(customer);
             newOrderTotal.setAmountTotal(new BigDecimal("0"));
-            newOrderTotal.setStatus(0);
+            newOrderTotal.setStatus(OrderTotalStatus.ORDERING);
             orderTotal = orderTotalRepository.save(newOrderTotal);
         }
 

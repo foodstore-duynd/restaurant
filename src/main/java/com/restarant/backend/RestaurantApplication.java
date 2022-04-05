@@ -22,6 +22,7 @@ public class RestaurantApplication {
         Environment env = app.run(args).getEnvironment();
         //logApplicationStartup(env);
         //"klog
+        ///vasldas
     }
 
 //    private static void logApplicationStartup(Environment env) {

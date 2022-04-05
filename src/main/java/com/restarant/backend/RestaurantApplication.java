@@ -25,6 +25,7 @@ public class RestaurantApplication {
         // done know
         ///vasldas
         //h lleoor
+        // blabla
     }
 
 //    private static void logApplicationStartup(Environment env) {

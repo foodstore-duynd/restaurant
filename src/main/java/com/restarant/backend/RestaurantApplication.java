@@ -21,7 +21,7 @@ public class RestaurantApplication {
         SpringApplication app = new SpringApplication(RestaurantApplication.class);
         Environment env = app.run(args).getEnvironment();
         //logApplicationStartup(env);
-        //"klog
+        //"klog dasllds
         ///vasldas
     }
 

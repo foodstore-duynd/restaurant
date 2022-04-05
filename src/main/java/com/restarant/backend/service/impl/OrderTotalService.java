@@ -79,7 +79,9 @@ public class OrderTotalService implements IOrderTotalService {
 
     @Override
     public Collection<OrderTotalDto> getAll(Pageable pageable) {
-        return null;
+        return mapper.convertToListDto(
+                orderTotalRepository.findAll(pageable).getContent()
+        );
     }
 
     @Override

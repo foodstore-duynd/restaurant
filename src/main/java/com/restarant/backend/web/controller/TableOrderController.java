@@ -12,9 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +25,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 @CrossOrigin("*")
+@Transactional
 public class TableOrderController {
 
     private final Logger log = LoggerFactory.getLogger(TableOrderController.class);
@@ -42,20 +46,25 @@ public class TableOrderController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/table-orders")
-    public ResponseEntity<?> createTableOrder(@RequestBody TableOrderDto dto)  {
+    public ResponseEntity<?> createTableOrder(@RequestBody List<TableOrderDto> dto, HttpServletRequest request) {
         log.debug("REST request to save TableOrder : {}", dto);
-        try {
-            TableOrderDto result = tableOrderService.create(dto);
-            return ResponseEntity.ok().body(result);
-        } catch (InvalidDataExeception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+
+        List<TableOrderDto> result = new ArrayList<>();
+        for (TableOrderDto tableOrderDto : dto) {
+            try {
+                result.add(tableOrderService.create(tableOrderDto, request));
+            } catch (InvalidDataExeception e) {
+                log.error("Error when create table-order", e);
+            }
         }
+        return ResponseEntity.ok().body(result);
+
     }
 
     /**
      * {@code PUT  /table-orders/:id} : Updates an existing tableOrder.
      *
-     * @param id the id of the tableOrder to save.
+     * @param id         the id of the tableOrder to save.
      * @param tableOrder the tableOrder to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated tableOrder,
      * or with status {@code 400 (Bad Request)} if the tableOrder is not valid,
@@ -87,7 +96,8 @@ public class TableOrderController {
         log.debug("REST request to get all TableOrders");
         return (List<TableOrderDto>) tableOrderService.getAll(pageable);
     }
-//
+
+    //
 //    /**
 //     * {@code GET  /table-orders/:id} : get the "id" tableOrder.
 //     *
@@ -98,12 +108,13 @@ public class TableOrderController {
     public ResponseEntity<?> getTableOrder(@PathVariable Long id) {
         log.debug("REST request to get TableOrder : {}", id);
         TableOrderDto result = tableOrderService.getById(id);
-        if(result == null){
+        if (result == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         return ResponseEntity.ok(result);
     }
-//
+
+    //
 //    /**
 //     * {@code DELETE  /table-orders/:id} : delete the "id" tableOrder.
 //     *
@@ -114,7 +125,7 @@ public class TableOrderController {
     public ResponseEntity<?> deleteTableOrder(@PathVariable Long id) {
         log.debug("REST request to delete tableOrder : {}", id);
         try {
-            if(tableOrderService.deleteById(id)){
+            if (tableOrderService.deleteById(id)) {
                 return ResponseEntity.ok().body("Delete success!");
             }
         } catch (InvalidDataExeception e) {

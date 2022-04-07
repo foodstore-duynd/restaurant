@@ -35,10 +35,10 @@ public class Voucher implements Serializable {
     private String title;
 
     @Column(name = "active")
-    private Long active;
+    private Long active = 0L;
 
     @Column(name = "deleteflag")
-    private long deleteflag;
+    private long deleteflag = 0L;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "orderTotals", "vouchers" }, allowSetters = true)

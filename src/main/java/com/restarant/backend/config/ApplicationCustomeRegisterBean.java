@@ -59,4 +59,9 @@ public class ApplicationCustomeRegisterBean {
     public PaymentMapper getPaymentMapper(){
         return new PaymentMapper(Payment.class, PaymentDto.class);
     }
+
+    @Bean("voucherMapper")
+    public VoucherMapper getVoucherMapper(){
+        return new VoucherMapper(Voucher.class, VoucherDto.class);
+    }
 }

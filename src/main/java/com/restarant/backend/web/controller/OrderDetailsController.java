@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,21 +44,25 @@ public class OrderDetailsController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/order-details")
-    public ResponseEntity<?> createOrderDetails(@RequestBody OrderDetailsDto dto) throws URISyntaxException {
+    public ResponseEntity<?> createOrderDetails(@RequestBody List<OrderDetailsDto> dto) throws URISyntaxException {
         log.debug("REST request to save OrderDetails : {}", dto);
-        try {
-            OrderDetailsDto result = orderDetailsService.create(dto);
-            return ResponseEntity.ok().body(result);
-        } catch (InvalidDataExeception e) {
-            log.error("Error when createOrderDetails", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+
+        List<OrderDetailsDto> result = new ArrayList<>();
+        for (OrderDetailsDto orderDetailsDto : dto) {
+            try {
+                result.add(orderDetailsService.create(orderDetailsDto));
+            } catch (InvalidDataExeception e) {
+                log.error("Error when create order-detail", e);
+            }
         }
+        return ResponseEntity.ok().body(result);
+
     }
 
     /**
      * {@code PUT  /order-details/:id} : Updates an existing orderDetails.
      *
-     * @param id the id of the orderDetails to save.
+     * @param id           the id of the orderDetails to save.
      * @param orderDetails the orderDetails to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated orderDetails,
      * or with status {@code 400 (Bad Request)} if the orderDetails is not valid,
@@ -66,13 +71,13 @@ public class OrderDetailsController {
      */
     @PutMapping("/order-details/{id}")
     public ResponseEntity<?> updateOrderDetails(
-        @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody OrderDetailsDto dto
+            @PathVariable(value = "id", required = false) final Long id,
+            @RequestBody OrderDetailsDto dto
     ) throws URISyntaxException {
         log.debug("REST request to update OrderDetails : {}, {}", id, dto);
         try {
             OrderDetailsDto result = orderDetailsService.update(id, dto);
-            if(result == null){
+            if (result == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
             return ResponseEntity.ok(result);
@@ -104,7 +109,7 @@ public class OrderDetailsController {
     public ResponseEntity<?> getOrderDetails(@PathVariable Long id) {
         log.debug("REST request to get OrderDetails : {}", id);
         OrderDetailsDto result = orderDetailsService.getById(id);
-        if(result == null){
+        if (result == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         return ResponseEntity.ok(result);
@@ -120,7 +125,7 @@ public class OrderDetailsController {
     public ResponseEntity<?> deleteOrderDetails(@PathVariable Long id) {
         log.debug("REST request to delete OrderDetails : {}", id);
         try {
-            if(orderDetailsService.deleteById(id)){
+            if (orderDetailsService.deleteById(id)) {
                 return ResponseEntity.noContent().build();
             }
         } catch (InvalidDataExeception e) {

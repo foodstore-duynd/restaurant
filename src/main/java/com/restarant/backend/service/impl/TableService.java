@@ -103,10 +103,10 @@ public class TableService implements ITableService {
     }
 
     @Override
-    public List<TableDto> getAllTableAvailable(Pageable pageable, Long timestamp) {
+    public List<TableDto> getAllTableAvailable(Pageable pageable, Long userOrderTime) {
         List<Tables> tables = tablesRepository.findAll();
         List<Tables> result = tables.stream()
-                .filter(table -> isAvailable(table.getId(), timestamp))
+                .filter(table -> isAvailable(table.getId(), userOrderTime))
                 .collect(Collectors.toList());
 
         int start = (int) pageable.getOffset();
@@ -117,7 +117,7 @@ public class TableService implements ITableService {
     }
 
     @Override
-    public boolean isAvailable(Long tableId, Long timestamp) {
+    public boolean isAvailable(Long tableId, Long userOrderTime) {
         Tables tables = tablesRepository.findById(tableId).orElse(null);
         if (tables == null) {
             return false;
@@ -128,13 +128,10 @@ public class TableService implements ITableService {
                 .filter(tableOrder -> tableOrder.getOrderTotal() != null)
                 .map(tableOrder -> tableOrder.getOrderTotal().getOrderTime())
                 .filter(orderTime -> orderTime != null)
-                .noneMatch(orderTime -> orderTime >= timestamp - TIME_EATING
-                        && orderTime <= timestamp + TIME_EATING);
+                .noneMatch(orderTime -> orderTime >= userOrderTime - TIME_EATING
+                        && orderTime <= userOrderTime + TIME_EATING);
     }
 
-    public static void main(String[] args) {
-        System.out.println(System.currentTimeMillis());
-        System.out.println(LocalDateTime.now().minusDays(2).toInstant(ZoneOffset.UTC).toEpochMilli());
-    }
+
 
 }

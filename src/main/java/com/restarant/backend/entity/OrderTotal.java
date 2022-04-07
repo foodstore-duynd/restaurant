@@ -8,6 +8,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,6 +41,12 @@ public class OrderTotal implements Serializable {
 
     @Column(name = "status")
     private Integer status;
+
+    @Column(name = "order_time")
+    private Long orderTime;
+
+    @Column(name = "create_at")
+    private Long createdAt = System.currentTimeMillis();
 
     @OneToMany(mappedBy = "orderTotal", cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = {"orderDetails", "tables", "orderTotal"}, allowSetters = true)

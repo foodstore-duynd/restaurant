@@ -10,6 +10,7 @@ public class OrderTotalDto {
     private Long id;
     private Long voucher;
     private int status;
+    private Long orderTime;
     private BigDecimal amountTotal;
     private Set<TableOrderDto> tableOrders;
     private Long paymentId;

@@ -80,7 +80,6 @@ public class TablesController {
             log.error("Error when update Table", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
     }
 
     /**
@@ -89,9 +88,13 @@ public class TablesController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of tables in body.
      */
     @GetMapping("/tables")
-    public List<TableDto> getAllTables(Pageable pageable) {
+    public List<TableDto> getAllTables(Pageable pageable,
+                                       @RequestParam(value = "order_time", required = false) Long timestamp) {
         log.debug("REST request to get all Tables");
-        return (List<TableDto>) tableService.getAll(pageable);
+        if(timestamp == null){
+            return (List<TableDto>) tableService.getAll(pageable);
+        }
+        return tableService.getAllTableAvailable(pageable, timestamp);
     }
 
     /**

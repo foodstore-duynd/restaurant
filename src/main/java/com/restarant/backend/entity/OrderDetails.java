@@ -42,6 +42,9 @@ public class OrderDetails implements Serializable {
     @JsonIgnoreProperties(value = {"orderDetails", "tables", "orderTotal"}, allowSetters = true)
     private TableOrder tableOrder;
 
+    @Column(name = "status")
+    private Integer status = 0;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

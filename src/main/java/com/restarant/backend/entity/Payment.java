@@ -24,10 +24,10 @@ public class Payment implements Serializable {
     private Long id;
 
     @Column(name = "deposit", precision = 21, scale = 2)
-    private BigDecimal deposit;
+    private BigDecimal deposit = new BigDecimal(0);
 
     @Column(name = "status")
-    private Long status;
+    private Long status = 0L;
 
     @JsonIgnoreProperties(value = { "tableOrders", "payment", "customer", "staff" }, allowSetters = true)
     @OneToOne

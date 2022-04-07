@@ -84,8 +84,12 @@ public class OrderDetailsService implements IOrderDetailsService {
 
     @Override
     public boolean deleteById(Long id) throws InvalidDataExeception {
-        if (!orderDetailsRepository.existsById(id)) {
+        OrderDetails orderDetails = orderDetailsRepository.findById(id).orElse(null);
+        if (orderDetails == null) {
             throw new InvalidDataExeception("The orderDetail[id] not found");
+        }
+        if(orderDetails.getStatus() == 1){
+            return false;
         }
 
         log.info("Someone delete category id-" + id);

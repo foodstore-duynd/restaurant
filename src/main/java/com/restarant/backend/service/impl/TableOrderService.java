@@ -1,6 +1,5 @@
 package com.restarant.backend.service.impl;
 
-import com.restarant.backend.dto.OrderTotalDto;
 import com.restarant.backend.dto.TableOrderDto;
 import com.restarant.backend.entity.Customer;
 import com.restarant.backend.entity.OrderTotal;
@@ -11,6 +10,7 @@ import com.restarant.backend.repository.OrderTotalRepository;
 import com.restarant.backend.repository.TableOrderRepository;
 import com.restarant.backend.repository.TablesRepository;
 import com.restarant.backend.service.ITableOrderService;
+import com.restarant.backend.service.ITableService;
 import com.restarant.backend.service.mapper.IConverterDto;
 import com.restarant.backend.service.validate.exception.InvalidDataExeception;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -29,16 +28,17 @@ public class TableOrderService implements ITableOrderService {
     private final TableOrderRepository tableOrderRepository;
     private final IConverterDto<TableOrder, TableOrderDto> mapper;
     private final OrderTotalRepository orderTotalRepository;
+    private final ITableService tableService;
     private final TablesRepository tablesRepository;
-
 
     public TableOrderService(TableOrderRepository tableOrderRepository,
                              @Qualifier("tableOrderMapper") IConverterDto<TableOrder, TableOrderDto> mapper,
                              OrderTotalRepository orderTotalRepository,
-                             TablesRepository tablesRepository) {
+                             ITableService tableService, TablesRepository tablesRepository) {
         this.tableOrderRepository = tableOrderRepository;
         this.mapper = mapper;
         this.orderTotalRepository = orderTotalRepository;
+        this.tableService = tableService;
         this.tablesRepository = tablesRepository;
     }
 
@@ -47,7 +47,10 @@ public class TableOrderService implements ITableOrderService {
         if(dto.getTableId() == null){
             throw new InvalidDataExeception("id must not null");
         }
-        if(tablesRepository.findByIdAndStatusIs(dto.getTableId(), 0L) == null){
+        if(dto.getOrderTime() == null){
+            throw new InvalidDataExeception("require field[order_time]");
+        }
+        if(!tableService.isAvailable(dto.getTableId(), dto.getOrderTime())){
             throw new InvalidDataExeception("Table are using!");
         }
 
@@ -60,6 +63,7 @@ public class TableOrderService implements ITableOrderService {
         if(orderTotal == null){
             OrderTotal newOrderTotal = new OrderTotal();
             newOrderTotal.setCustomer(customer);
+            newOrderTotal.setOrderTime(dto.getOrderTime());
             newOrderTotal.setAmountTotal(new BigDecimal("0"));
             newOrderTotal.setStatus(OrderTotalStatus.ORDERING);
             orderTotal = orderTotalRepository.save(newOrderTotal);
@@ -75,7 +79,7 @@ public class TableOrderService implements ITableOrderService {
 
         Tables tables = new Tables();
         tables.setId(result.getTables().getId());
-        tables.setStatus(1L);
+        //tables.setStatus(1L);
         tablesRepository.save(tables);
 
         return mapper.convertToDto(result);
@@ -96,6 +100,10 @@ public class TableOrderService implements ITableOrderService {
     public boolean deleteById(Long id) throws InvalidDataExeception {
         if (!tableOrderRepository.existsById(id)) {
             throw new InvalidDataExeception("The orderDetail[id] not found");
+        }
+        TableOrder tableOrder = tableOrderRepository.findById(id).orElse(null);
+        if(tableOrder.getOrderTotal() != null && tableOrder.getOrderTotal().getStatus() != OrderTotalStatus.ORDERING){
+            throw new InvalidDataExeception("Cant delete because the order is accepted");
         }
 
         log.info("Someone delete category id-" + id);

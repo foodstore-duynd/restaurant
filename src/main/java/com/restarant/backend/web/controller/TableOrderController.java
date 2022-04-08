@@ -61,6 +61,11 @@ public class TableOrderController {
 
     }
 
+    @GetMapping("table-orders/customer")
+    public ResponseEntity<?> getTableOrderByCustomer(HttpServletRequest request){
+        return ResponseEntity.ok(tableOrderService.getTableOrderByCustomerId(request));
+    }
+
     /**
      * {@code PUT  /table-orders/:id} : Updates an existing tableOrder.
      *

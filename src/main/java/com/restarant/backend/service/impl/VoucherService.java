@@ -48,13 +48,14 @@ public class VoucherService implements IVoucherService {
         for (OrderTotal orderTotal : orderTotals) {
             totalBeforeAddOrderTotal = totalBeforeAddOrderTotal.add(orderTotal.getAmountTotal());
         }
+
         OrderTotal orderTotalAdd = orderTotalRepository.getOrderTotalByCustomerId(customerId);
 
         Rank rankBeforeAddOrderTotal = Rank.getRanking(totalBeforeAddOrderTotal);
         Rank rankAfterAddOrderTotal = Rank.getRanking(
                 totalBeforeAddOrderTotal.add(orderTotalAdd.getAmountTotal()));
 
-        if (!rankAfterAddOrderTotal.equals(rankBeforeAddOrderTotal)) {
+        if (rankAfterAddOrderTotal != null && !rankAfterAddOrderTotal.equals(rankBeforeAddOrderTotal)) {
             Customer customer = new Customer();
             customer.setId(customerId);
 

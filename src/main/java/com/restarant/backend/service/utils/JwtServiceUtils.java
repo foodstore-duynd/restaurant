@@ -2,6 +2,7 @@ package com.restarant.backend.service.utils;
 
 import com.restarant.backend.entity.Account;
 import com.restarant.backend.entity.Customer;
+import com.restarant.backend.repository.CustomerRepository;
 import com.restarant.backend.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,9 @@ public class JwtServiceUtils {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     public Account getAccountByToken(HttpServletRequest request) {
 //        String token = request.getHeader("token");
@@ -26,6 +30,14 @@ public class JwtServiceUtils {
     public Customer getCustomerByToken(HttpServletRequest request){
         Customer customer = new Customer();
         customer.setId(1L);
+
         return customer;
+//        String token = request.getHeader("token");
+//        if(token != null && jwtUtils.validateJwtToken(token)){
+//            String username = jwtUtils.getUserNameFromJwtToken(token);
+//            Customer customer = customerRepository.getCustomerByUsername(username);
+//            return customer;
+//        }
+//        return null;
     }
 }

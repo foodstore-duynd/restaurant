@@ -44,7 +44,7 @@ public class Customer implements Serializable {
     @Column(name = "deleteflag")
     private Long deleteflag = 0L;
 
-    @OneToOne(mappedBy = "customer")
+    @OneToOne(mappedBy = "customer", fetch = FetchType.LAZY)
     private Account account;
 
     @OneToMany(mappedBy = "customer")

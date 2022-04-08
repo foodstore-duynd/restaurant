@@ -1,12 +1,12 @@
 package com.restarant.backend.service.impl;
 
 import com.restarant.backend.dto.PaymentDto;
-import com.restarant.backend.entity.OrderTotal;
 import com.restarant.backend.entity.Payment;
 import com.restarant.backend.repository.OrderTotalRepository;
 import com.restarant.backend.repository.PaymentRepository;
 import com.restarant.backend.repository.TablesRepository;
 import com.restarant.backend.service.IPaymentService;
+import com.restarant.backend.service.IVoucherService;
 import com.restarant.backend.service.mapper.IConverterDto;
 import com.restarant.backend.service.validate.PaymentValidator;
 import com.restarant.backend.service.validate.exception.InvalidDataExeception;
@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 
 @Slf4j
@@ -26,15 +25,18 @@ public class PaymentService implements IPaymentService {
     private final IConverterDto<Payment, PaymentDto> mapper;
     private final PaymentValidator paymentValidator;
     private final OrderTotalRepository orderTotalRepository;
+    private final IVoucherService voucherService;
 
     public PaymentService(PaymentRepository paymentRepository,
                           TablesRepository tablesRepository,
                           IConverterDto<Payment, PaymentDto> mapper,
-                          OrderTotalRepository orderTotalRepository) {
+                          OrderTotalRepository orderTotalRepository,
+                          IVoucherService voucherService) {
         this.paymentRepository = paymentRepository;
         this.tablesRepository = tablesRepository;
         this.mapper = mapper;
         this.orderTotalRepository = orderTotalRepository;
+        this.voucherService = voucherService;
         paymentValidator = new PaymentValidator();
     }
 
@@ -45,6 +47,8 @@ public class PaymentService implements IPaymentService {
         Payment payment = mapper.convertToEntity(dto);
         return null;
     }
+
+
 
 
     @Override

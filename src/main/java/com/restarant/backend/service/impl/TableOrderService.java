@@ -15,13 +15,16 @@ import com.restarant.backend.service.mapper.IConverterDto;
 import com.restarant.backend.service.utils.JwtServiceUtils;
 import com.restarant.backend.service.validate.exception.InvalidDataExeception;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -131,6 +134,19 @@ public class TableOrderService implements ITableOrderService {
 
         return mapper.convertToDto(result);
 
+    }
+
+    @Override
+    public List<TableOrderDto> getTableOrderByCustomerId(HttpServletRequest request) {
+        Customer customer = jwtServiceUtils.getCustomerByToken(request);
+        List<TableOrder> result = new ArrayList<>();
+        if(customer != null && customer.getId() != null){
+            OrderTotal orderTotal = orderTotalRepository.getOrderTotalByCustomerId(customer.getId());
+            if(orderTotal != null){
+                result.addAll(orderTotal.getTableOrders());
+            }
+        }
+        return mapper.convertToListDto(result);
     }
 
     @Override

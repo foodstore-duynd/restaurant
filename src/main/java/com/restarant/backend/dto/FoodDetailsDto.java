@@ -12,6 +12,7 @@ public class FoodDetailsDto {
     private BigDecimal discount;
     private BigDecimal amount;
     private Long foodId;
+    private String foodName;
     private Set<FoodMediaDto> foodMedias;
 
 }

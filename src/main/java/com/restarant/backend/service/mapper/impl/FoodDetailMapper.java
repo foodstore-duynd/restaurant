@@ -17,6 +17,7 @@ public class FoodDetailMapper extends AbstractDtoMapperAdapter<FoodDetails, Food
             return null;
         }
         result.setFoodId(entity.getFood().getId());
+        result.setFoodName(entity.getFood().getName());
         return result;
     }
 }

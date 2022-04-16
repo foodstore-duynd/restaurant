@@ -10,4 +10,6 @@ public interface ITableOrderService extends IServiceAdapter<TableOrderDto> {
     TableOrderDto create(TableOrderDto dto, HttpServletRequest request) throws InvalidDataExeception;
 
     List<TableOrderDto> getTableOrderByCustomerId(HttpServletRequest request);
+
+    TableOrderDto getTableOrderingByTableId(long tableId, Long queryTime);
 }

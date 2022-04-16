@@ -28,16 +28,12 @@ public class JwtServiceUtils {
     }
 
     public Customer getCustomerByToken(HttpServletRequest request){
-        Customer customer = new Customer();
-        customer.setId(1L);
-
-        return customer;
-//        String token = request.getHeader("token");
-//        if(token != null && jwtUtils.validateJwtToken(token)){
-//            String username = jwtUtils.getUserNameFromJwtToken(token);
-//            Customer customer = customerRepository.getCustomerByUsername(username);
-//            return customer;
-//        }
-//        return null;
+        String token = request.getHeader("token");
+        if(token != null && jwtUtils.validateJwtToken(token)){
+            String username = jwtUtils.getUserNameFromJwtToken(token);
+            Customer customer = customerRepository.getCustomerByUsername(username);
+            return customer;
+        }
+        return null;
     }
 }

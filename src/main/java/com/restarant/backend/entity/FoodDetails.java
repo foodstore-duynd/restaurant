@@ -55,6 +55,9 @@ public class FoodDetails implements Serializable {
     @JsonIgnoreProperties(value = { "comments", "foodDetalls", "category" }, allowSetters = true)
     private Food food;
 
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "favouriteFood")
+    private Set<Customer> customers;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

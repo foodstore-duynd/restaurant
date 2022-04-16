@@ -52,45 +52,6 @@ public class TableOrderService implements ITableOrderService {
     @Override
     public TableOrderDto create(TableOrderDto dto) throws InvalidDataExeception {
         return null;
-//        if(dto.getTableId() == null){
-//            throw new InvalidDataExeception("id must not null");
-//        }
-//        if(dto.getOrderTime() == null){
-//            throw new InvalidDataExeception("require field[order_time]");
-//        }
-//        if(!tableService.isAvailable(dto.getTableId(), dto.getOrderTime())){
-//            throw new InvalidDataExeception("Table are using!");
-//        }
-//
-//        Customer customer = new Customer();
-//        customer.setId(1L);
-//
-//        // create Order Total
-//        OrderTotal orderTotal = orderTotalRepository.getOrderTotalByCustomerId(1L);
-//
-//        if(orderTotal == null){
-//            OrderTotal newOrderTotal = new OrderTotal();
-//            newOrderTotal.setCustomer(customer);
-//            newOrderTotal.setOrderTime(dto.getOrderTime());
-//            newOrderTotal.setAmountTotal(new BigDecimal("0"));
-//            newOrderTotal.setStatus(OrderTotalStatus.ORDERING);
-//            orderTotal = orderTotalRepository.save(newOrderTotal);
-//        }
-//
-//        if(orderTotal == null){
-//            return null;
-//        }
-//
-//        dto.setOrderTotalId(orderTotal.getId());
-//        TableOrder tableOrder = mapper.convertToEntity(dto);
-//        TableOrder result = tableOrderRepository.save(tableOrder);
-//
-//        Tables tables = new Tables();
-//        tables.setId(result.getTables().getId());
-//        //tables.setStatus(1L);
-//        tablesRepository.save(tables);
-//
-//        return mapper.convertToDto(result);
     }
 
     @Override
@@ -106,7 +67,9 @@ public class TableOrderService implements ITableOrderService {
         }
 
         Customer customer = jwtServiceUtils.getCustomerByToken(request);
-
+        if(customer == null){
+            throw new InvalidDataExeception("user not login");
+        }
         // create Order Total
         OrderTotal orderTotal = orderTotalRepository.getOrderTotalByCustomerId(customer.getId());
 
@@ -148,6 +111,21 @@ public class TableOrderService implements ITableOrderService {
         }
         return mapper.convertToListDto(result);
     }
+
+    @Override
+    public TableOrderDto getTableOrderingByTableId(long tableId, Long queryTime) {
+        if(queryTime == null){
+            queryTime = System.currentTimeMillis();
+        }
+        TableOrder tableOrder = tableOrderRepository
+                .getByOrderTimeAndTableId(
+                        tableId,
+                        queryTime - TableService.TIME_EATING,
+                        queryTime + TableService.TIME_EATING);
+        return mapper.convertToDto(tableOrder);
+    }
+
+
 
     @Override
     public TableOrderDto update(Long id, TableOrderDto dto) throws InvalidDataExeception {

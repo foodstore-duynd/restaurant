@@ -2,6 +2,7 @@ package com.restarant.backend.config;
 
 import com.restarant.backend.dto.*;
 import com.restarant.backend.entity.*;
+import com.restarant.backend.service.mapper.IConverterDto;
 import com.restarant.backend.service.mapper.impl.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -63,5 +64,10 @@ public class ApplicationCustomeRegisterBean {
     @Bean("voucherMapper")
     public VoucherMapper getVoucherMapper(){
         return new VoucherMapper(Voucher.class, VoucherDto.class);
+    }
+
+    @Bean("customerMapper")
+    public IConverterDto<Customer, CustomerDto> getCustomerMapper(){
+        return new CustomerMapper(Customer.class, CustomerDto.class);
     }
 }

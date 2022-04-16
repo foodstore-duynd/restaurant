@@ -35,8 +35,8 @@ public class Account {
     @Column(name = "timereset")
     private LocalDate timereset;
 
-    @OneToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "customer_id")
     private Customer customer;
 
 

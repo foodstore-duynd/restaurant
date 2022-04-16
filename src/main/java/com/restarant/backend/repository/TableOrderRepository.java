@@ -15,4 +15,11 @@ import java.util.List;
 public interface TableOrderRepository extends JpaRepository<TableOrder, Long> {
     @Query("SELECT e FROM TableOrder e WHERE e.tables.id = :tableId")
     List<TableOrder> getAllByTableId(Long tableId);
+
+    @Query("SELECT e FROM TableOrder e " +
+            "WHERE e.tables.id = :tableId " +
+            "AND e.orderTotal.orderTime >= :startTime " +
+            "AND e.orderTotal.orderTime <= :endTime " +
+            "AND e.orderTotal.status <> 3")
+    TableOrder getByOrderTimeAndTableId(long tableId, long startTime, long endTime);
 }

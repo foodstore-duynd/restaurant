@@ -55,6 +55,7 @@ public class TableOrderController {
                 result.add(tableOrderService.create(tableOrderDto, request));
             } catch (InvalidDataExeception e) {
                 log.error("Error when create table-order", e);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             }
         }
         return ResponseEntity.ok().body(result);
@@ -64,6 +65,12 @@ public class TableOrderController {
     @GetMapping("table-orders/customer")
     public ResponseEntity<?> getTableOrderByCustomer(HttpServletRequest request){
         return ResponseEntity.ok(tableOrderService.getTableOrderByCustomerId(request));
+    }
+
+    @GetMapping("table-orders/table/{tableId}")
+    public ResponseEntity<?> getTableOrdering(@PathVariable("tableId") long id,
+                                              @RequestParam(value = "query_time", required = false) Long queryTime){
+        return ResponseEntity.ok(tableOrderService.getTableOrderingByTableId(id, queryTime));
     }
 
     /**

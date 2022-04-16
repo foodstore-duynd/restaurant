@@ -1,5 +1,6 @@
 package com.restarant.backend.web.controller;
 
+import com.restarant.backend.dto.FavouriteFoodDto;
 import com.restarant.backend.entity.Customer;
 import com.restarant.backend.service.ICustomerService;
 import com.restarant.backend.dto.CustomerDto;
@@ -10,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Set;
 
 
@@ -38,16 +41,55 @@ public class CustomerController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/customers")
-    public ResponseEntity<Customer> createCustomer(@RequestBody CustomerDto customerDto) throws URISyntaxException {
+    public ResponseEntity<?> createCustomer(@RequestBody CustomerDto customerDto) throws URISyntaxException {
         log.debug("REST request to save Customer : {}", customerDto);
 
         try {
-            Customer result = customerService.save(customerDto);
+            CustomerDto result = customerService.create(customerDto);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
         } catch (InvalidDataExeception e) {
             log.error("Error when save customer", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/customers/favourite-food")
+    public ResponseEntity<?> addFavouriteFood(@RequestBody FavouriteFoodDto dto,
+                                              HttpServletRequest request) throws URISyntaxException {
+        log.debug("REST request to save Customer : {}", dto);
+
+        try {
+            CustomerDto result = customerService.addFavouriteFood(request, dto);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (InvalidDataExeception e) {
+            log.error("Error when add favourite food", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+    }
+
+    @GetMapping("/customers/favourite-food")
+    public ResponseEntity<?> getFavouriteFood(HttpServletRequest request) throws URISyntaxException {
+        try {
+            CustomerDto result = customerService.getById(request);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (InvalidDataExeception e) {
+            log.error("Error when add favourite food", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/customers/favourite-food")
+    public ResponseEntity<?> deleteFavouriteFood(HttpServletRequest request, @RequestBody FavouriteFoodDto dto) throws URISyntaxException {
+        try {
+            log.info("someone delete favourite food");
+            if(customerService.delete(request, dto.getFoodDetailId())){
+                return ResponseEntity.status(HttpStatus.OK).body(null);
+            }
+        } catch (InvalidDataExeception e) {
+            log.error("Error when add favourite food", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     /**
@@ -73,9 +115,9 @@ public class CustomerController {
 
 
     @GetMapping("/customers")
-    public Set<Customer> getAllCustomers() {
+    public List<CustomerDto> getAllCustomers() {
         log.debug("REST request to get all Customers");
-        return customerService.getAll();
+        return (List<CustomerDto>) customerService.getAll();
     }
 
     /**
@@ -84,14 +126,18 @@ public class CustomerController {
      * @param id the id of the customer to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the customer, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/customers/{id}")
-    public ResponseEntity<Customer> getCustomer(@PathVariable Long id) {
-        log.debug("REST request to get Customer : {}", id);
-        Customer customer = customerService.getCustomerById(id);
-        if(customer == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    @GetMapping("/customer")
+    public ResponseEntity<?> getCustomer(HttpServletRequest request) {
+        try {
+            CustomerDto customer = customerService.getById(request);
+            if(customer == null){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+            return ResponseEntity.ok(customer);
+        } catch (InvalidDataExeception e) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        return ResponseEntity.ok(customer);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     /**
@@ -104,7 +150,7 @@ public class CustomerController {
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
         log.debug("REST request to delete Customer : {}", id);
         try {
-            customerService.detele(id);
+            customerService.deleteById(id);
             return ResponseEntity.ok(null);
         } catch (InvalidDataExeception e) {
             log.error("Error when delete customer", e);

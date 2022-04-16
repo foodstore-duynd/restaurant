@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 public class TableService implements ITableService {
 
-    private static final long TIME_EATING = TimeUnit.HOURS.toMillis(2);
+    public static final long TIME_EATING = TimeUnit.HOURS.toMillis(5);
 
     private final TableMapper tableMapper;
     private final TablesRepository tablesRepository;

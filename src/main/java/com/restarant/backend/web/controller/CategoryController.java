@@ -31,11 +31,9 @@ public class CategoryController {
     private static final String ENTITY_NAME = "category";
 
     private final ICategoryService categoryService;
-    private final EntityManager entityManager;
 
-    public CategoryController(ICategoryService categoryService, EntityManager entityManager) {
+    public CategoryController(ICategoryService categoryService) {
         this.categoryService = categoryService;
-        this.entityManager = entityManager;
     }
 
     @PostMapping("/categories")

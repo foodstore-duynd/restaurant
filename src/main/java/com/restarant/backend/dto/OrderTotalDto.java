@@ -11,6 +11,7 @@ public class OrderTotalDto {
     private Long voucher;
     private int status;
     private Long orderTime;
+    private Long createdAt;
     private BigDecimal amountTotal;
     private Set<TableOrderDto> tableOrders;
     private Long paymentId;

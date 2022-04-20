@@ -16,7 +16,12 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -87,6 +92,17 @@ public class OrderTotalService implements IOrderTotalService {
     @Override
     public OrderTotal createToCustomer(Customer customer) {
         return null;
+    }
+
+    @Override
+    public BigDecimal getRevenueBetweenTime(long fromTime, long toTime) {
+        List<OrderTotal> orderTotalList = orderTotalRepository.getListOrderTotalBetweenTime(fromTime, toTime, OrderTotalStatus.PAID);
+        System.out.println(orderTotalList.size());
+        BigDecimal total = new BigDecimal(0);
+        for(OrderTotal orderTotal: orderTotalList){
+            total = total.add(orderTotal.getAmountTotal());
+        }
+        return total;
     }
 
 }
